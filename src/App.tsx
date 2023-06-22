@@ -82,7 +82,7 @@ const StickerWrap = styled.section<{ fontStyle: string }>`
           : props.fontStyle === "Do Hyeon"
           ? "16px"
           : props.fontStyle === "Nanum Pen Script"
-          ? "18px"
+          ? "20px"
           : "14px"};
     }
   }
@@ -127,49 +127,32 @@ function App() {
   const [miniImgs, setMiniImgs] = useState<Array<string>>([]);
   const [largeImgs, setLargeImgs] = useState<Array<string>>([]);
   const [customUrl, setCustomUrl] = useState("");
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState(
+    JSON.parse(sessionStorage.getItem("inputValue") || "{}"),
+  );
   const [selectedFont, setSeletedFont] = useState("");
+
   useEffect(() => {
-    setBasicImgs([
-      "basic01",
-      "basic02",
-      "basic03",
-      "basic04",
-      "basic05",
-      "basic06",
-      "basic07",
-      "basic08",
-      "basic09",
-      "basic10",
-      "basic11",
-      "basic12",
-      "basic13",
-      "basic14",
-    ]);
-    setMiniImgs([
-      "mini01",
-      "mini02",
-      "mini03",
-      "mini04",
-      "mini05",
-      "mini06",
-      "mini07",
-      "mini08",
-      "mini09",
-      "mini10",
-      "mini11",
-      "mini12",
-      "mini13",
-    ]);
-    setLargeImgs([
-      "large01",
-      "large02",
-      "large03",
-      "large04",
-      "large05",
-      "large06",
-    ]);
+    window.sessionStorage.setItem("inputValue", JSON.stringify(inputValue));
+  }, [inputValue]);
+
+  useEffect(() => {
+    makeArr("mini", 13);
+    makeArr("basic", 14);
+    makeArr("large", 6);
   }, []);
+
+  const makeArr = (size: string, num: number) => {
+    let arr = [];
+    for (let i = 0; i < num; i++) {
+      arr.push(`${size}${i}`);
+    }
+    size === "mini"
+      ? setMiniImgs([...arr])
+      : size === "basic"
+      ? setBasicImgs([...arr])
+      : setLargeImgs([...arr]);
+  };
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     console.log(e.currentTarget);
@@ -199,7 +182,10 @@ function App() {
     } = e;
     setSeletedFont(value);
   };
-
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    window.sessionStorage.setItem("inputValue", JSON.stringify(inputValue));
+  };
   return (
     <div className="App">
       <SelectWrap>
@@ -236,7 +222,7 @@ function App() {
       <StickerWrap fontStyle={selectedFont}>
         <form onChange={onchange}>
           <StickerColumn>
-            {miniImgs.map((img, index) => (
+            {miniImgs.map((name, index) => (
               <MiniSticker key={index} onClick={onClick}>
                 <div>
                   <img
@@ -244,13 +230,18 @@ function App() {
                     alt=""
                   />
                 </div>
-                <input type="text" name={img} />
+                <input
+                  type="text"
+                  name={name}
+                  value={inputValue[`${name}`] || ""}
+                  onChange={() => {}}
+                />
               </MiniSticker>
             ))}
           </StickerColumn>
           <StickerColumn>
             <StickerInnerWrap>
-              {basicImgs.map((img, index) => (
+              {basicImgs.map((name, index) => (
                 <BasicSticker key={index} onClick={onClick}>
                   <div>
                     <img
@@ -258,12 +249,17 @@ function App() {
                       alt=""
                     />
                   </div>
-                  <input type="text" name={img} />
+                  <input
+                    type="text"
+                    name={name}
+                    value={inputValue[`${name}`] || ""}
+                    onChange={() => {}}
+                  />
                 </BasicSticker>
               ))}
             </StickerInnerWrap>
             <StickerInnerWrap>
-              {largeImgs.map((img, index) => (
+              {largeImgs.map((name, index) => (
                 <LargeSticker key={index} onClick={onClick}>
                   <div>
                     <img
@@ -271,14 +267,28 @@ function App() {
                       alt=""
                     />
                   </div>
-                  <input type="text" name={img} />
+                  <input
+                    type="text"
+                    name={name}
+                    value={inputValue[`${name}`] || ""}
+                    onChange={() => {}}
+                  />
                 </LargeSticker>
               ))}
             </StickerInnerWrap>
           </StickerColumn>
         </form>
       </StickerWrap>
-      <button>Get Print</button>
+      <form onSubmit={onSubmit}>
+        <input type="submit" value="완료!!" />
+      </form>
+      <button
+        onClick={() => {
+          setInputValue({});
+        }}
+      >
+        Reset
+      </button>
     </div>
   );
 }
