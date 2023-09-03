@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/HamsterStudent/name-sticker.git/static/js/main.82f81f59.js",
-    "index.html": "/HamsterStudent/name-sticker.git/index.html",
-    "main.82f81f59.js.map": "/HamsterStudent/name-sticker.git/static/js/main.82f81f59.js.map"
+    "main.js": "/HamsterStudent/name-sticker/static/js/main.e516924a.js",
+    "index.html": "/HamsterStudent/name-sticker/index.html",
+    "main.e516924a.js.map": "/HamsterStudent/name-sticker/static/js/main.e516924a.js.map"
   },
   "entrypoints": [
-    "static/js/main.82f81f59.js"
+    "static/js/main.e516924a.js"
   ]
 }
